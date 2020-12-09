@@ -4,29 +4,31 @@
 			<v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
 			<v-toolbar-title class="nav-heading">Covid Tracker</v-toolbar-title>
 		</v-app-bar>
-		<v-navigation-drawer v-model="drawer" absolute temporary>
+		<v-navigation-drawer
+			v-model="drawer"
+			absolute
+			temporary
+			class="black accent-4"
+		>
 			<v-list nav dense>
 				<v-list-item-group
 					v-model="group"
 					active-class="deep-purple--text text--accent-4"
 				>
 					<v-list-item @click="drawer = false">
-						<v-list-item-icon>
-							<v-icon>mdi-home</v-icon>
-						</v-list-item-icon>
+						<img src="../assets/home.svg" alt='' />
 						<v-list-item-title
-							><router-link to="/">
-								Home
+							><router-link to="/" class="nav-text-link">
+								<div class="nav-text">Home</div>
 							</router-link></v-list-item-title
 						>
 					</v-list-item>
+					<hr class="horzentalRow"/>
 					<v-list-item @click="drawer = false">
-						<v-list-item-icon>
-							<v-icon>mdi-map-marker-radius</v-icon>
-						</v-list-item-icon>
+						<img src="../assets/trello.svg" alt='' />
 						<v-list-item-title>
-							<router-link to="/state-wise">
-								State wise
+							<router-link to="/state-wise" class="nav-text-link">
+								<div class="nav-text">State wise</div>
 							</router-link>
 						</v-list-item-title>
 					</v-list-item>
@@ -49,12 +51,9 @@ export default {
 			drawer: false
 		};
 	},
-	mounted() {
-	},
+	mounted() {},
 
-	methods: {
-	
-	}
+	methods: {}
 };
 </script>
 
@@ -70,5 +69,17 @@ export default {
 }
 .nav-heading {
 	color: black;
+}
+.nav-text {
+	color: white;
+	margin-left: 10px;
+}
+.nav-text-link {
+	text-decoration: none;
+}
+.horzentalRow{
+	border-bottom: 0px;
+    border-top: 1px solid #f5ad26;
+    margin: 5px -11px;
 }
 </style>
