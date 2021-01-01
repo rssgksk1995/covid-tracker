@@ -48,7 +48,8 @@ export default {
 			casesTimeSeries: "",
 			casesStatewise: "",
 			casesTested: "",
-			drawer: false
+			drawer: false,
+			group: '',
 		};
 	},
 	mounted() {},
