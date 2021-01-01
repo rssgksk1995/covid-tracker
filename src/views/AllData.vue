@@ -20,7 +20,7 @@
 								Confirmed
 							</th>
 							<th class="text-left">
-								Deceased 😢
+								Deceased
 							</th>
 							<th class="text-left">
 								Recovered
@@ -29,7 +29,7 @@
 								Total confirmed
 							</th>
 							<th class="text-left">
-								Total deceased 😢
+								Total deceased
 							</th>
 							<th class="text-left">
 								Total recovered
@@ -37,7 +37,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr v-for="item in casesTimeSeries.reverse()" :key="item.date">
+						<tr v-for="item in casesTimeSeries" :key="item.date">
 							<td>{{ item.date }}</td>
 							<td>{{ item.dailyconfirmed }}</td>
 							<td class="dailydeceased">{{ item.dailydeceased }}</td>
@@ -77,7 +77,7 @@ export default {
 				.getAllCovidCases()
 				.then(response => {
 					console.log("response", response.data);
-					this.casesTimeSeries = response.data.cases_time_series;
+					this.casesTimeSeries = response.data.cases_time_series.reverse();
 					this.casesStatewise = response.data.statewise;
 					this.casesTested = response.data.tested;
 					this.isLoading = false;

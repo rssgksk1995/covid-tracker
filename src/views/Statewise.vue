@@ -23,7 +23,7 @@
 								Confirmed
 							</th>
 							<th class="text-left">
-								Deaths 😢
+								Deaths
 							</th>
 							<th class="text-left">
 								Recovered
@@ -37,7 +37,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr v-for="item in casesStatewise.reverse()" :key="item.date">
+						<tr v-for="item in casesStatewise" :key="item.date">
 							<td>{{ item.state }}</td>
 							<td>{{ item.active }}</td>
 							<td>{{ item.confirmed }}</td>
@@ -77,7 +77,7 @@ export default {
 				.getAllCovidCases()
 				.then(response => {
 					this.casesTimeSeries = response.data.cases_time_series;
-					this.casesStatewise = response.data.statewise;
+					this.casesStatewise = response.data.statewise.reverse();
 					this.casesTested = response.data.tested;
 					this.isLoading = false;
 				})
