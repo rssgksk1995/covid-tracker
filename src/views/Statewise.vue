@@ -11,13 +11,13 @@
 		<div>
 			<v-card dark>
 				<v-card-title>
-					Covid records
 					<v-spacer></v-spacer>
 					<v-text-field
 						v-model="search"
 						append-icon="mdi-magnify"
 						label="Search"
 						single-line
+						clearable
 						hide-details
 					></v-text-field>
 				</v-card-title>

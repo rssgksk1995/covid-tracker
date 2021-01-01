@@ -11,12 +11,12 @@
 		<div>
 			<v-card dark>
 				<v-card-title>
-					Covid records
 					<v-spacer></v-spacer>
 					<v-text-field
 						v-model="search"
 						append-icon="mdi-magnify"
 						label="Search"
+						clearable
 						single-line
 						hide-details
 					></v-text-field>
@@ -63,6 +63,7 @@ export default {
 			casesTested: "",
 			drawer: false,
 			isLoading: false,
+			search: '',
 			headers: [
 				{ text: "Date", value: "date", width: "200" },
 				{ text: "Confirmed", value: "confirmed", width: "200" },
