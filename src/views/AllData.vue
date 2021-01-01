@@ -8,52 +8,51 @@
 				color="black"
 			></v-progress-circular>
 		</div>
-		<div class="daily-result-table">
-			<v-simple-table dark fixed-header height="92.3vh">
-				<template v-slot:default>
-					<thead>
-						<tr>
-							<th class="text-left">
-								Date
-							</th>
-							<th class="text-left">
-								Confirmed
-							</th>
-							<th class="text-left">
-								Deceased
-							</th>
-							<th class="text-left">
-								Recovered
-							</th>
-							<th class="text-left">
-								Total confirmed
-							</th>
-							<th class="text-left">
-								Total deceased
-							</th>
-							<th class="text-left">
-								Total recovered
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="item in casesTimeSeries" :key="item.date">
-							<td>{{ item.date }}</td>
-							<td>{{ item.dailyconfirmed }}</td>
-							<td class="dailydeceased">{{ item.dailydeceased }}</td>
-							<td class="recoveredCases">{{ item.dailyrecovered }}</td>
-							<td>{{ item.totalconfirmed }}</td>
-							<td class="totaldeceased">{{ item.totaldeceased }}</td>
-							<td>{{ item.totalrecovered }}</td>
-						</tr>
-					</tbody>
-				</template>
-			</v-simple-table>
+		<div>
+			<v-card dark>
+				<v-card-title>
+					Covid records
+					<v-spacer></v-spacer>
+					<v-text-field
+						v-model="search"
+						append-icon="mdi-magnify"
+						label="Search"
+						single-line
+						hide-details
+					></v-text-field>
+				</v-card-title>
+				<v-data-table
+					:headers="headers"
+					:items="totalCases"
+					:footer-props="{
+						'items-per-page-options': [8, 20, 30, -1]
+					}"
+					:items-per-page="8"
+					class="elevation-1"
+					:search="search"
+					dark
+					height="70vh"
+				>
+					<template v-slot:item.deceased="{ item }">
+						<span class="dailydeceased">{{ item.deceased }}</span>
+					</template>
+					<template v-slot:item.recovered="{ item }">
+						<span class="recoveredCases">{{ item.recovered }}</span>
+					</template>
+					<template v-slot:item.totalRecovered="{ item }">
+						<span class="allRecoveredCases">{{ item.totalRecovered }}</span>
+					</template>
+					<template v-slot:item.totalDeceased="{ item }">
+						<span class="totaldeceased">{{ item.totalDeceased }}</span>
+					</template>
+				</v-data-table>
+			</v-card>
 		</div>
 	</div>
 </template>
 <script>
 import api from "@/api";
+import moment from "moment";
 
 export default {
 	name: "LandingPage",
@@ -63,7 +62,18 @@ export default {
 			casesStatewise: "",
 			casesTested: "",
 			drawer: false,
-			isLoading: false
+			isLoading: false,
+			headers: [
+				{ text: "Date", value: "date", width: "200" },
+				{ text: "Confirmed", value: "confirmed", width: "200" },
+				{ text: "Deceased", value: "deceased", width: "200" },
+				{ text: "Recovered", value: "recovered" },
+				{ text: "Total confirmed", value: "totalConfirmed", width: "200" },
+				{ text: "Total deceased", value: "totalDeceased", width: "200" },
+				{ text: "Total recovered", value: "totalRecovered", width: "200" }
+			],
+
+			totalCases: []
 		};
 	},
 	mounted() {
@@ -76,16 +86,36 @@ export default {
 			api
 				.getAllCovidCases()
 				.then(response => {
-					console.log("response", response.data);
 					this.casesTimeSeries = response.data.cases_time_series.reverse();
 					this.casesStatewise = response.data.statewise;
 					this.casesTested = response.data.tested;
 					this.isLoading = false;
+					this.setAllTimeData(response.data.cases_time_series.reverse());
 				})
 				.catch(e => {
 					console.log(e);
 					this.isLoading = false;
 				});
+		},
+		setAllTimeData(data) {
+			let newData = [];
+			data.forEach(element => {
+				newData.push({
+					date: moment(element.dateymd).format("DD-MM-YYYY hh:mm:a"),
+					confirmed: element.dailyconfirmed,
+					recovered: element.dailyrecovered,
+					deceased: element.dailydeceased,
+					totalConfirmed: element.totalconfirmed,
+					totalDeceased: element.totaldeceased,
+					totalRecovered: element.totalrecovered
+				});
+			});
+			this.totalCases = newData;
+		},
+		getColor(calories) {
+			if (calories > 400) return "red";
+			else if (calories > 200) return "orange";
+			else return "green";
 		}
 	}
 };
@@ -106,6 +136,9 @@ export default {
 }
 .recoveredCases {
 	color: #03c04a;
+}
+.allRecoveredCases {
+	color: #02993b;
 }
 .loader {
 	position: absolute;
