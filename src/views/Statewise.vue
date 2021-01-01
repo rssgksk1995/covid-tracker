@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="background">
 		<div v-if="isLoading" class="loader">
 			<v-progress-circular
 				:size="70"
@@ -31,7 +31,7 @@
 					class="elevation-1"
 					:search="search"
 					dark
-					height="70vh"
+					height="100%"
 				>
 					<template v-slot:item.recovered="{ item }">
 						<span class="recoveredCases">{{ item.recovered }}</span>
@@ -133,5 +133,9 @@ export default {
 	position: absolute;
 	top: 50vh;
 	left: 50vw;
+}
+.background {
+	background-color: #1e1e1e;
+	min-height: 100vh;
 }
 </style>

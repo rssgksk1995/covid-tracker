@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="background">
 		<div v-if="isLoading" class="loader">
 			<v-progress-circular
 				:size="70"
@@ -31,7 +31,7 @@
 					class="elevation-1"
 					:search="search"
 					dark
-					height="70vh"
+					height="100%"
 				>
 					<template v-slot:item.deceased="{ item }">
 						<span class="dailydeceased">{{ item.deceased }}</span>
@@ -63,7 +63,7 @@ export default {
 			casesTested: "",
 			drawer: false,
 			isLoading: false,
-			search: '',
+			search: "",
 			headers: [
 				{ text: "Date", value: "date", width: "200" },
 				{ text: "Confirmed", value: "confirmed", width: "200" },
@@ -134,6 +134,10 @@ export default {
 }
 .nav-heading {
 	color: black;
+}
+.background {
+	background-color: #1e1e1e;
+	min-height: 100vh;
 }
 .recoveredCases {
 	color: #03c04a;
