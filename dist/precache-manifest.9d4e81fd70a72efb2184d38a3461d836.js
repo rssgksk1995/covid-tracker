@@ -4,8 +4,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/covid19.png"
   },
   {
-    "revision": "1551aaff83a1df9ea832",
-    "url": "/css/chunk-38868810.bf9cf667.css"
+    "revision": "8861bfcd26ca6a8b36de",
+    "url": "/css/chunk-38868810.271a0813.css"
   },
   {
     "revision": "01ef2242d0ca5a92cd2d",
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/chunk-cb04682e.9e338e87.css"
   },
   {
-    "revision": "92c342a883bff432b4e0",
-    "url": "/css/chunk-f46af166.74e2c258.css"
+    "revision": "1d330223263fde03ede7",
+    "url": "/css/chunk-f46af166.37c2c109.css"
   },
   {
     "revision": "51a808b819421f43480a",
@@ -36,16 +36,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/trello.1380a5bf.svg"
   },
   {
-    "revision": "086ab2c5c0d09b6c768ed7a648e6cff4",
+    "revision": "8ba14de1448186fc564462a80eb4fe8d",
     "url": "/index.html"
   },
   {
-    "revision": "b6678f0d3422b1d727be",
-    "url": "/js/app.ab1e00db.js"
+    "revision": "d2f5310e3a44bb2921ff",
+    "url": "/js/app.71f6b8b2.js"
   },
   {
-    "revision": "1551aaff83a1df9ea832",
-    "url": "/js/chunk-38868810.77be1f20.js"
+    "revision": "8861bfcd26ca6a8b36de",
+    "url": "/js/chunk-38868810.27138d22.js"
   },
   {
     "revision": "01ef2242d0ca5a92cd2d",
@@ -60,8 +60,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/chunk-cb04682e.91ecd9cb.js"
   },
   {
-    "revision": "92c342a883bff432b4e0",
-    "url": "/js/chunk-f46af166.9334413b.js"
+    "revision": "1d330223263fde03ede7",
+    "url": "/js/chunk-f46af166.2345fffe.js"
   },
   {
     "revision": "51a808b819421f43480a",
