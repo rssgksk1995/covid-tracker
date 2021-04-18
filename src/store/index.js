@@ -1,15 +1,15 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+/* eslint-disable*/
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+import covid from "@/store/modules/covid";
 
-export default new Vuex.Store({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
+Vue.use(Vuex);
+
+let store = new Vuex.Store({
   modules: {
-  }
-})
+    covid,
+  },
+});
+
+export { store };
