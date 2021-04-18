@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 const LandingPage = () => import('../views/LandingPage.vue');
 const AllData = () => import('../views/AllData.vue');
 const Statewise = () => import('../views/Statewise.vue');
+const StateWiseDetails = () => import('../views/StateWiseDetails.vue');
 
 Vue.use(VueRouter);
 
@@ -23,6 +24,12 @@ const routes = [
           path: '/state-wise',
           name: 'Statewise',
           component: Statewise
+        },
+        {
+          title: 'StateWiseDetails',
+          path: '/state-wise-detail',
+          name: 'StateWiseDetails',
+          component: StateWiseDetails
         },
       ]
     }
