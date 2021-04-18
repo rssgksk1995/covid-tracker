@@ -1,4 +1,4 @@
 # covid-tracker
 A responsive web application to tracke covid 
-
-deployed @ https://determined-babbage-dc4eaa.netlify.app/
+it can be accessed at below address:
+𝐡𝐭𝐭𝐩𝐬://𝐜𝐨𝐯𝐢𝐝-𝐥𝐢𝐬𝐭.𝐧𝐞𝐭𝐥𝐢𝐟𝐲.𝐚𝐩𝐩/
