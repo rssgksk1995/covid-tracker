@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.82dddf87ed9cbeac5e596a1bcb927a99.js"
+  "/precache-manifest.b571f3d5ddca3da68ca0d8dc092e064a.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "covid-tracker"});
