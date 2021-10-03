@@ -26,7 +26,7 @@
             >
           </v-list-item>
           <hr class="horzentalRow" />
-          <v-list-item @click="drawer = false">
+          <!-- <v-list-item @click="drawer = false">
             <img src="../assets/trello.svg" alt="" />
             <v-list-item-title>
               <router-link to="/state-wise" class="nav-text-link">
@@ -36,7 +36,7 @@
               </router-link>
             </v-list-item-title>
           </v-list-item>
-          <hr class="horzentalRow" />
+          <hr class="horzentalRow" /> -->
           <v-list-item @click="drawer = false">
             <img src="../assets/trello.svg" alt="" />
             <v-list-item-title>
@@ -58,9 +58,6 @@ export default {
   name: "LandingPage",
   data() {
     return {
-      casesTimeSeries: "",
-      casesStatewise: "",
-      casesTested: "",
       drawer: false,
       group: "",
       selectedHeading: "All",

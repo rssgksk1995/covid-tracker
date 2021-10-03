@@ -5,10 +5,10 @@
         :size="70"
         :width="7"
         indeterminate
-        color="black"
+        color="red"
       ></v-progress-circular>
     </div>
-    <div>
+    <div v-else>
       <v-card dark>
         <v-card-title>
           <v-spacer></v-spacer>
@@ -35,7 +35,9 @@
           :single-expand="singleExpand"
           :expanded.sync="expanded"
           show-expand
-          item-key="stateName"
+          item-key="recovered"
+          :sort-by="['recovered']"
+          :sort-desc="[true]"
         >
           <template v-slot:expanded-item="{ headers, item }">
             <td :colspan="headers.length">
@@ -50,16 +52,19 @@
                         Tested
                       </th>
                       <th class="text-left">
-                        Confirme Cases
-                      </th>
-                      <th class="text-left">
-                        Deaths
+                        Confirm
                       </th>
                       <th class="text-left">
                         Recovered
                       </th>
                       <th class="text-left">
-                        Vaccinated
+                        Deaths
+                      </th>
+                      <th class="text-left">
+                        Vaccinated1
+                      </th>
+                      <th class="text-left">
+                        Vaccinated2
                       </th>
                     </tr>
                   </thead>
@@ -78,13 +83,16 @@
                         {{ eachDistricts.confirmedCases }}
                       </td>
                       <td>
-                        {{ eachDistricts.deaths }}
-                      </td>
-                      <td>
                         {{ eachDistricts.recovered }}
                       </td>
                       <td>
-                        {{ eachDistricts.vaccinated }}
+                        {{ eachDistricts.deaths }}
+                      </td>
+                      <td>
+                        {{ eachDistricts.vaccinated1 }}
+                      </td>
+                      <td>
+                        {{ eachDistricts.vaccinated2 }}
                       </td>
                     </tr>
                   </tbody>
@@ -100,7 +108,8 @@
   </div>
 </template>
 <script>
-import {getStateName} from '../utils/common'
+import {getStateName} from '../utils/common';
+import moment from 'moment';
 export default {
   name: "StateWiseDetails",
   data() {
@@ -116,8 +125,10 @@ export default {
         { text: "Confirmed", value: "confirmedCases", width: "200" },
         { text: "Recovered", value: "recovered", width: "200" },
         { text: "Deaths", value: "deaths", width: "100" },
-        { text: "Vaccinated", value: "vaccinated", width: "200" },
+        { text: "vaccinated1", value: "vaccinated1", width: "200" },
+        { text: "Vaccinated2", value: "vaccinated2", width: "200" },
         { text: "Tested", value: "tested", width: "200" },
+        { text: "Updated", value: "updateTime", width: "200" },
       ],
     };
   },
@@ -157,14 +168,15 @@ export default {
           confirmedCases: element.total.confirmed,
           deaths: element.total.deceased,
           recovered: element.total.recovered,
-          vaccinated: element.total.vaccinated,
+          vaccinated1: element.total.vaccinated1,
+          vaccinated2: element.total.vaccinated2,
           districts: this.getDistrictDetails(element.districts),
+          updateTime: moment(element.meta.last_updated).format('DD-MMM-YYYY'),
         });
       });
       this.stateWiseCovidData = newData;
     },
     getDistrictDetails(districtObject) {
-      console.log("data", districtObject);
       if (districtObject) {
         let destrictArray = [];
         let districtNames = Object.keys(districtObject);
@@ -176,10 +188,10 @@ export default {
             confirmedCases: element.total.confirmed,
             deaths: element.total.deceased,
             recovered: element.total.recovered,
-            vaccinated: element.total.vaccinated,
+            vaccinated1: element.total.vaccinated1,
+            vaccinated2: element.total.vaccinated2,
           });
         });
-        console.log("destrictArray", destrictArray);
         return destrictArray;
       } else {
         return [];

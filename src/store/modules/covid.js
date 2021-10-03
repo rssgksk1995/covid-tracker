@@ -9,6 +9,7 @@ function defaultState() {
     overAllStatewiseCovidData: {},
     overAllCovidTestData: {},
     stateWiseDetailedData: {},
+    timeSeriesData: {},
     errorObj: {},
   };
 }
@@ -24,10 +25,12 @@ export default {
       (state.overAllCovidData = overAllCovidData),
     SET_OVER_ALL_STATEWISE_COVID_DATA: (state, overAllStatewiseCovidData) =>
       (state.overAllStatewiseCovidData = overAllStatewiseCovidData),
-    SET_STATEWISE_DETAILED_DATA: (state, overAllCovidTestData) =>
+    SET_OVER_ALL_COVID_TEST_DATA: (state, overAllCovidTestData) =>
       (state.overAllCovidTestData = overAllCovidTestData),
     SET_STATEWISE_DETAILED_DATA: (state, stateWiseDetailedData) =>
       (state.stateWiseDetailedData = stateWiseDetailedData),
+    SET_TIME_SERIES_DATA: (state, data) =>
+      (state.timeSeriesData = data),
     ERR_MSG: (state, err) => (state.errorObj = err),
   },
 
@@ -61,6 +64,20 @@ export default {
             reject(error);
           });
       }),
+    fetchTimeSerieData: ({ commit }) =>
+      new Promise((resolve, reject) => {
+        api
+          .getCasesTimeSerieDataApi()
+          .then((response) => {
+            commit("SET_TIME_SERIES_DATA", response.data);
+            resolve(response);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      }),
+
+      
     // getMoreUserData: ({ commit, state }, params) =>
     //   new Promise((resolve, reject) => {
     //     api
