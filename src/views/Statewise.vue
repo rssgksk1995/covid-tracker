@@ -9,7 +9,7 @@
       ></v-progress-circular>
     </div>
     <div>
-      <canvas id="statewise-chart"></canvas>
+      <canvas id="overAll-chart"></canvas>
     </div>
     <div>
       <v-card dark>
@@ -19,28 +19,34 @@
             v-model="search"
             append-icon="mdi-magnify"
             label="Search"
-            single-line
             clearable
+            single-line
             hide-details
           ></v-text-field>
         </v-card-title>
         <v-data-table
           :headers="headers"
-          :items="stateWiseCovidData"
+          :items="totalCases"
           :footer-props="{
-            'items-per-page-options': [8, 20, 30, -1],
+            'items-per-page-options': [50, 75, 100, -1],
           }"
-          :items-per-page="-1"
+          :items-per-page="50"
           class="elevation-1"
           :search="search"
           dark
           height="100%"
         >
+          <template v-slot:item[deceased]="{ item }">
+            <span class="dailydeceased">{{ item.deceased }}</span>
+          </template>
           <template v-slot:item[recovered]="{ item }">
             <span class="recoveredCases">{{ item.recovered }}</span>
           </template>
-          <template v-slot:item[deaths]="{ item }">
-            <span class="dailydeceased">{{ item.deaths }}</span>
+          <template v-slot:item[totalRecovered]="{ item }">
+            <span class="allRecoveredCases">{{ item.totalRecovered }}</span>
+          </template>
+          <template v-slot:item[totalDeceased]="{ item }">
+            <span class="totaldeceased">{{ item.totalDeceased }}</span>
           </template>
         </v-data-table>
       </v-card>
@@ -51,27 +57,34 @@
 import Chart from "chart.js/auto";
 
 export default {
-  name: "Statewise",
+  name: "AllData",
   data() {
     return {
+      casesTimeSeries: "",
+      casesStatewise: "",
+      casesTested: "",
       drawer: false,
       isLoading: false,
-      stateWiseCovidData: [],
       search: "",
       headers: [
-        { text: "State", value: "stateName", width: "300" },
-        { text: "Active", value: "activeCases", width: "200" },
-        { text: "Confirmed", value: "confirmedCases", width: "200" },
-        { text: "Recovered", value: "recovered", width: "200" },
-        { text: "Deaths", value: "deaths", width: "100" },
-        { text: "Last updated time", value: "upateTime", width: "200" },
+        { text: "Date", value: "date", width: "200" },
+        { text: "Confirmed", value: "confirmed", width: "200" },
+        { text: "Deceased", value: "deceased", width: "200" },
+        { text: "Recovered", value: "recovered" },
+        { text: "Total confirmed", value: "totalConfirmed", width: "200" },
+        { text: "Total deceased", value: "totalDeceased", width: "200" },
+        { text: "Total recovered", value: "totalRecovered", width: "200" },
       ],
+
+      totalCases: [],
     };
   },
   mounted() {
-    let data = this.$store.state.covid.overAllStatewiseCovidData;
+    let data = this.$store.state.covid.overAllCovidData;
+    this.getAllCovidCasesTimeSeries();
+
     if (data.length) {
-      this.setStateData(data);
+      this.setAllTimeData(data);
       this.setChartData(data);
     } else {
       this.getAllCovidCases();
@@ -79,13 +92,44 @@ export default {
   },
 
   methods: {
+    getAllCovidCasesTimeSeries() {
+      this.$store
+        .dispatch("covid/fetchTimeSerieData")
+        .then((res) => {
+          let timeSeriesData = this.$store.state.covid.timeSeriesData;
+          timeSeriesData.en;
+          for (const [key, value] of Object.entries(timeSeriesData)) {
+            const { dates } = value;
+
+            let latestKey = Object.keys(dates)[Object.keys(dates).length - 1];
+            let latestValue = dates[latestKey];
+            const {
+              delta,
+              total,
+            } = latestValue;
+            const {
+              confirmed,
+              deceased,
+              recovered,
+              tested,
+              vaccinated1,
+              vaccinated2,
+            } = total;
+          }
+          this.isLoading = false;
+        })
+        .catch((error) => {
+          console.log("error", error);
+          this.isLoading = false;
+        });
+    },
     getAllCovidCases() {
       this.isLoading = true;
       this.$store
         .dispatch("covid/getOverAllCovidData")
         .then((res) => {
-          let data = this.$store.state.covid.overAllStatewiseCovidData;
-          this.setStateData(data);
+          let data = this.$store.state.covid.overAllCovidData;
+          this.setAllTimeData(data);
           this.setChartData(data);
           this.isLoading = false;
         })
@@ -94,78 +138,50 @@ export default {
           this.isLoading = false;
         });
     },
-    setStateData(data) {
+    setAllTimeData(data) {
       let newData = [];
-      data.forEach((element) => {
-        newData.push({
-          stateName: `${element.state}(${element.statecode})`,
-          activeCases: element.active,
-          confirmedCases: element.confirmed,
-          deaths: element.deaths,
-          recovered: element.recovered,
-          upateTime: element.lastupdatedtime,
-        });
-      });
-      this.stateWiseCovidData = newData;
-    },
-    setChartData(data) {
-      let totalLevel = "";
-      let chartLabel = [];
-      // let confirmDataSet = [];
-      let activeDataSet = [];
-      let totalDataSet = [];
-      let recoveredDataSet = [];
-      let deadDataSet = [];
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].state === "Total") {
-          totalLevel = data[i].confirmed;
-        } else {
-          chartLabel.push(data[i].state);
-          // confirmDataSet.push(data[i].confirmed);
-          activeDataSet.push(data[i].active);
-          totalDataSet.push(
-            parseInt(data[i].confirmed) +
-              parseInt(data[i].recovered) +
-              parseInt(data[i].deaths)
-          );
-          recoveredDataSet.push(data[i].recovered);
-          deadDataSet.push(data[i].deaths);
+      if (data.length) {
+        for (let i = data.length - 1; i >= 0; i--) {
+          newData.push({
+            date: data[i].date,
+            confirmed: data[i].dailyconfirmed,
+            recovered: data[i].dailyrecovered,
+            deceased: data[i].dailydeceased,
+            totalConfirmed: data[i].totalconfirmed,
+            totalDeceased: data[i].totaldeceased,
+            totalRecovered: data[i].totalrecovered,
+          });
         }
       }
+      this.totalCases = newData;
+    },
+    setChartData(data) {
+      let chartLabel = [];
+      let dailyConfirmedDataSet = [];
+      let dailyRecoveredDataSet = [];
+      for (let i = 0; i <= data.length - 1; i++) {
+        chartLabel.push(data[i].date);
+        dailyConfirmedDataSet.push(data[i].dailyconfirmed);
+        dailyRecoveredDataSet.push(data[i].dailyrecovered);
+      }
 
-      new Chart(document.getElementById("statewise-chart"), {
+      new Chart(document.getElementById("overAll-chart"), {
         type: "bar",
         data: {
           labels: chartLabel,
           datasets: [
             {
-              label: `Death cases`,
-              backgroundColor: ["#FF0000"],
-              data: deadDataSet,
-            },
-            // {
-            //   label: `Confirmed cases`,
-            //   backgroundColor: ["#FF7F50"],
-            //   data: confirmDataSet,
-            // },
-            {
-              label: `Recovered cases`,
-              backgroundColor: ["#008000"],
-              data: recoveredDataSet,
+              label: "Covid recovered cases",
+              backgroundColor: "#00FF7F",
+              data: dailyRecoveredDataSet,
             },
             {
-              label: `Active cases`,
-              backgroundColor: ["#40E0D0"],
-              data: activeDataSet,
-            },
-            {
-              label: `Total cases`,
-              backgroundColor: ["#6495ED"],
-              data: totalDataSet,
+              label: "Covid confirmed cases",
+              backgroundColor: "#3e95cd",
+              data: dailyConfirmedDataSet,
             },
           ],
         },
-
         options: {
           responsive: true,
           scales: {
@@ -191,7 +207,7 @@ export default {
             },
             title: {
               display: true,
-              text: `Total confirmed cases: ${totalLevel}`,
+              text: "Covid date based data",
             },
           },
         },
@@ -208,19 +224,25 @@ export default {
 .dailydeceased {
   color: #ff2400;
 }
+.totaldeceased {
+  color: #b22222;
+}
 .nav-heading {
   color: black;
 }
+.background {
+  background-color: #1e1e1e;
+  min-height: 100vh;
+}
 .recoveredCases {
   color: #03c04a;
+}
+.allRecoveredCases {
+  color: #02993b;
 }
 .loader {
   position: absolute;
   top: 50vh;
   left: 50vw;
-}
-.background {
-  background-color: #1e1e1e;
-  min-height: 100vh;
 }
 </style>

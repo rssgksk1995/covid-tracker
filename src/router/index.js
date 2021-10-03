@@ -19,12 +19,12 @@ const routes = [
           name: 'AllData',
           component: AllData
         },
-				{
-          title: 'Statewise',
-          path: '/state-wise',
-          name: 'Statewise',
-          component: Statewise
-        },
+				// {
+        //   title: 'Statewise',
+        //   path: '/state-wise',
+        //   name: 'Statewise',
+        //   component: Statewise
+        // },
         {
           title: 'StateWiseDetails',
           path: '/state-wise-detail',
